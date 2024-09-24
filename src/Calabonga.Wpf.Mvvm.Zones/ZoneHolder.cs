@@ -23,9 +23,47 @@ public sealed class ZoneHolder
     /// <returns></returns>
     public IZone? GetZone(string zoneName) => _zones.FirstOrDefault(x => x.Name == zoneName);
 
+    /// <summary>
+    /// Find zones where ViewModel is placed
+    /// </summary>
+    /// <param name="viewModel"></param>
+    /// <param name="onDeactivating"></param>
+    /// <param name="onDeactivated"></param>
+    /// <returns></returns>
+    public void GetViewModelZones(IZoneViewModel viewModel, Action<ZoneItem> onDeactivating, Action<ZoneItem> onDeactivated)
+    {
+
+        foreach (var zone in _zones)
+        {
+            var itemsToRemove = new List<ZoneItem>();
+            foreach (var zoneView in zone.Views)
+            {
+                if (((IZoneView)zoneView.Content).DataContext is not IZoneViewModel zoneViewModel)
+                {
+                    continue;
+                }
+
+                if (zoneViewModel.GetType() == viewModel.GetType())
+                {
+                    itemsToRemove.Add(zoneView);
+                }
+            }
+
+            if (itemsToRemove.Any())
+            {
+                itemsToRemove.ForEach(x =>
+                {
+                    onDeactivating(x);
+                    zone.RemoveItem(x);
+                    onDeactivated(x);
+                });
+            }
+        }
+    }
+
     #region singleton
 
-    private static readonly Lazy<ZoneHolder> Lazy = new Lazy<ZoneHolder>(() => new ZoneHolder());
+    private static readonly Lazy<ZoneHolder> Lazy = new(() => new ZoneHolder());
 
     private ZoneHolder() { }
 

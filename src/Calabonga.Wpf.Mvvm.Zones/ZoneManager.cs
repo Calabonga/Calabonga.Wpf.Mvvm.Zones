@@ -13,18 +13,23 @@ public class ZoneManager : IZoneManager
 
     #region Events
 
-    public event EventHandler<ZoneView>? Activating;
+    public event EventHandler<ZoneItem>? Activating;
 
-    public event EventHandler<ZoneView>? Activated;
+    public event EventHandler<ZoneItem>? Activated;
 
-    public event EventHandler<ZoneView>? Deactivating;
+    public event EventHandler<ZoneItem>? Deactivating;
 
-    public event EventHandler<ZoneView>? Deactivated;
+    public event EventHandler<ZoneItem>? Deactivated;
+
+    public void Remove(IZoneViewModel viewModel)
+    {
+        ZoneHolder.Instance.GetViewModelZones(viewModel, OnDeactivating, OnDeactivated);
+    }
 
     #endregion
 
     /// <summary>
-    /// Executes Zone activation for generic type View and ViewModel
+    /// Executes Zone activation for generic type Content and ViewModel
     /// </summary>
     /// <typeparam name="TView"></typeparam>
     /// <typeparam name="TViewModel"></typeparam>
@@ -56,16 +61,35 @@ public class ZoneManager : IZoneManager
         using var scope = _serviceProvider.CreateScope();
         var view = scope.ServiceProvider.GetRequiredService<TView>();
         var viewModel = scope.ServiceProvider.GetRequiredService<TViewModel>();
+        if (viewModel is ZoneViewModelBase zoneViewModel)
+        {
+            zoneViewModel.ZoneManager = this;
+        }
+
         view.DataContext = viewModel;
         var zoneView = zone.CreateOrActivate(view, OnActivating);
         OnActivated(zoneView);
     }
 
-    protected virtual void OnActivating(ZoneView e) => Activating?.Invoke(this, e);
+    protected virtual void OnActivating(ZoneItem e)
+    {
+        if (((IZoneView)e.Content).DataContext is IZoneViewModel viewModel)
+        {
+            viewModel.OnActivate();
+        }
+        Activating?.Invoke(this, e);
+    }
 
-    protected virtual void OnActivated(ZoneView e) => Activated?.Invoke(this, e);
+    protected virtual void OnActivated(ZoneItem e) => Activated?.Invoke(this, e);
 
-    protected virtual void OnDeactivating(ZoneView e) => Deactivating?.Invoke(this, e);
+    protected virtual void OnDeactivating(ZoneItem e)
+    {
+        if (((IZoneView)e.Content).DataContext is IZoneViewModel viewModel)
+        {
+            viewModel.OnDeactivate();
+        }
+        Deactivating?.Invoke(this, e);
+    }
 
-    protected virtual void OnDeactivated(ZoneView e) => Deactivated?.Invoke(this, e);
+    protected virtual void OnDeactivated(ZoneItem e) => Deactivated?.Invoke(this, e);
 }

@@ -7,7 +7,11 @@ public interface IZone
 {
     string Name { get; }
 
-    ZoneView CreateOrActivate<TZoneView>(TZoneView view, Action<ZoneView> onActivating) where TZoneView : IZoneView;
+    IEnumerable<ZoneItem> Views { get; }
 
-    ZoneView? GetActive();
+    ZoneItem CreateOrActivate<TZoneView>(TZoneView view, Action<ZoneItem> onActivating) where TZoneView : IZoneView;
+
+    ZoneItem? GetActive();
+
+    void RemoveItem(ZoneItem zoneItem);
 }

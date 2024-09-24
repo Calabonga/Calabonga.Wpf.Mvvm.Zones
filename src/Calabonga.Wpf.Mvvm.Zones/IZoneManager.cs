@@ -6,7 +6,7 @@
 public interface IZoneManager
 {
     /// <summary>
-    /// Executes Zone activation for generic type View and ViewModel
+    /// Executes Zone activation for generic type Content and ViewModel
     /// </summary>
     /// <typeparam name="TView"></typeparam>
     /// <typeparam name="TViewModel"></typeparam>
@@ -15,11 +15,15 @@ public interface IZoneManager
         where TView : IZoneView
         where TViewModel : IZoneViewModel;
 
-    public event EventHandler<ZoneView>? Activating;
+    // Calabonga: Remove before pull request (IZoneManager 2024-09-24 11:07)
 
-    public event EventHandler<ZoneView>? Activated;
+    public event EventHandler<ZoneItem>? Activating;
 
-    public event EventHandler<ZoneView>? Deactivating;
+    public event EventHandler<ZoneItem>? Activated;
 
-    public event EventHandler<ZoneView>? Deactivated;
+    public event EventHandler<ZoneItem>? Deactivating;
+
+    public event EventHandler<ZoneItem>? Deactivated;
+
+    void Remove(IZoneViewModel viewModel);
 }

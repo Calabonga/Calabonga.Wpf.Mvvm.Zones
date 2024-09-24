@@ -2,23 +2,21 @@
 
 namespace Calabonga.Wpf.Mvvm.Zones;
 
-public class ZoneView
+public class ZoneItem
 {
-    public ZoneView(Type type, FrameworkElement view)
+    public ZoneItem(Type type, FrameworkElement content)
     {
         Type = type;
-        View = view;
+        Content = content;
     }
 
     public Type Type { get; }
 
-    public object View { get; }
+    public object Content { get; }
 
     public bool IsActive { get; private set; }
 
     public void DeactivateView() => IsActive = false;
 
     public void ActivateView() => IsActive = true;
-
-    public object? DataContext { get; set; }
 }

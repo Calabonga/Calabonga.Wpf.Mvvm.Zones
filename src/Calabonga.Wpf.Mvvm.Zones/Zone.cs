@@ -7,7 +7,7 @@ public class Zone : IZone
 {
     private readonly DependencyObject _control;
 
-    private readonly List<ZoneView> _views = new();
+    private readonly List<ZoneItem> _views = new();
 
     public Zone(string mapName, DependencyObject element)
     {
@@ -15,9 +15,11 @@ public class Zone : IZone
         _control = element;
     }
 
+    public IEnumerable<ZoneItem> Views => _views;
+
     public string Name { get; }
 
-    public ZoneView CreateOrActivate<TZoneView>(TZoneView view, Action<ZoneView> onActivating) where TZoneView : IZoneView
+    public ZoneItem CreateOrActivate<TZoneView>(TZoneView view, Action<ZoneItem> onActivating) where TZoneView : IZoneView
     {
         var viewInZone = _views.SingleOrDefault(x => x.Type == typeof(TZoneView));
 
@@ -28,7 +30,7 @@ public class Zone : IZone
                 throw new InvalidOperationException($"Unable to activate zone {Name} with {view.GetType()}");
             }
 
-            viewInZone = new ZoneView(typeof(TZoneView), userControl);
+            viewInZone = new ZoneItem(typeof(TZoneView), userControl);
             _views.Add(viewInZone);
 
         }
@@ -38,12 +40,19 @@ public class Zone : IZone
         return viewInZone;
     }
 
-    public ZoneView? GetActive() => _views.SingleOrDefault(x => x.IsActive);
+    public ZoneItem? GetActive() => _views.SingleOrDefault(x => x.IsActive);
 
-    private void SetContent(ZoneView view, Action<ZoneView> onActivating)
+    public void RemoveItem(ZoneItem zoneItem)
     {
-        onActivating(view);
-        view.ActivateView();
-        _control.SetValue(ContentControl.ContentProperty, view.View);
+        zoneItem.DeactivateView();
+        _views.Remove(zoneItem);
+        _control.SetValue(ContentControl.ContentProperty, null);
+    }
+
+    private void SetContent(ZoneItem zoneItem, Action<ZoneItem> onActivating)
+    {
+        onActivating(zoneItem);
+        zoneItem.ActivateView();
+        _control.SetValue(ContentControl.ContentProperty, zoneItem.Content);
     }
 }

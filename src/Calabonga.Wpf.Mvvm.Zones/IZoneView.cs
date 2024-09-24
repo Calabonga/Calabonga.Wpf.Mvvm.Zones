@@ -1,7 +1,7 @@
 ﻿namespace Calabonga.Wpf.Mvvm.Zones;
 
 /// <summary>
-/// Default interface for ZoneView
+/// Default interface for ZoneItem
 /// </summary>
 public interface IZoneView
 {
