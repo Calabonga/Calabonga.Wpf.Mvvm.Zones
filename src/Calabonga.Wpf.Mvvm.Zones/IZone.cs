@@ -7,7 +7,7 @@ public interface IZone
 {
     string Name { get; }
 
-    void CreateOrActivate<TZoneView>(TZoneView view) where TZoneView : IZoneView;
+    ZoneView CreateOrActivate<TZoneView>(TZoneView view, Action<ZoneView> onActivating) where TZoneView : IZoneView;
 
     ZoneView? GetActive();
 }

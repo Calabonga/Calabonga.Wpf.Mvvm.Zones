@@ -17,7 +17,7 @@ public class Zone : IZone
 
     public string Name { get; }
 
-    public void CreateOrActivate<TZoneView>(TZoneView view) where TZoneView : IZoneView
+    public ZoneView CreateOrActivate<TZoneView>(TZoneView view, Action<ZoneView> onActivating) where TZoneView : IZoneView
     {
         var viewInZone = _views.SingleOrDefault(x => x.Type == typeof(TZoneView));
 
@@ -33,13 +33,16 @@ public class Zone : IZone
 
         }
 
-        SetContent(viewInZone);
+        SetContent(viewInZone, onActivating);
+
+        return viewInZone;
     }
 
     public ZoneView? GetActive() => _views.SingleOrDefault(x => x.IsActive);
 
-    private void SetContent(ZoneView view)
+    private void SetContent(ZoneView view, Action<ZoneView> onActivating)
     {
+        onActivating(view);
         view.ActivateView();
         _control.SetValue(ContentControl.ContentProperty, view.View);
     }

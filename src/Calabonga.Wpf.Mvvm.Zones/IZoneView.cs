@@ -7,3 +7,4 @@ public interface IZoneView
 {
     object? DataContext { get; set; }
 }
+

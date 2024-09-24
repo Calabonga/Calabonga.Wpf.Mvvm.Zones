@@ -11,9 +11,27 @@ public class ZoneManager : IZoneManager
 
     public ZoneManager(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
 
-    public void ActivateZone<TZoneView, TZoneViewModel>(string zoneName)
-        where TZoneView : IZoneView
-        where TZoneViewModel : IZoneViewModel
+    #region Events
+
+    public event EventHandler<ZoneView>? Activating;
+
+    public event EventHandler<ZoneView>? Activated;
+
+    public event EventHandler<ZoneView>? Deactivating;
+
+    public event EventHandler<ZoneView>? Deactivated;
+
+    #endregion
+
+    /// <summary>
+    /// Executes Zone activation for generic type View and ViewModel
+    /// </summary>
+    /// <typeparam name="TView"></typeparam>
+    /// <typeparam name="TViewModel"></typeparam>
+    /// <param name="zoneName"></param>
+    public void ActivateZone<TView, TViewModel>(string zoneName)
+        where TView : IZoneView
+        where TViewModel : IZoneViewModel
     {
         var zone = ZoneHolder.Instance.GetZone(zoneName);
         if (zone is null)
@@ -25,19 +43,29 @@ public class ZoneManager : IZoneManager
 
         if (activeZone is not null && zoneName == zone.Name)
         {
-            if (typeof(TZoneView) == activeZone.Type)
+            if (typeof(TView) == activeZone.Type)
             {
                 return;
             }
 
+            OnDeactivating(activeZone);
             activeZone.DeactivateView();
-
+            OnDeactivated(activeZone);
         }
 
         using var scope = _serviceProvider.CreateScope();
-        var view = scope.ServiceProvider.GetRequiredService<TZoneView>();
-        var viewModel = scope.ServiceProvider.GetRequiredService<TZoneViewModel>();
+        var view = scope.ServiceProvider.GetRequiredService<TView>();
+        var viewModel = scope.ServiceProvider.GetRequiredService<TViewModel>();
         view.DataContext = viewModel;
-        zone.CreateOrActivate(view);
+        var zoneView = zone.CreateOrActivate(view, OnActivating);
+        OnActivated(zoneView);
     }
+
+    protected virtual void OnActivating(ZoneView e) => Activating?.Invoke(this, e);
+
+    protected virtual void OnActivated(ZoneView e) => Activated?.Invoke(this, e);
+
+    protected virtual void OnDeactivating(ZoneView e) => Deactivating?.Invoke(this, e);
+
+    protected virtual void OnDeactivated(ZoneView e) => Deactivated?.Invoke(this, e);
 }

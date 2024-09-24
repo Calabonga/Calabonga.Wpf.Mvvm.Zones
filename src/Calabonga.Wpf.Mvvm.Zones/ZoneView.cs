@@ -19,4 +19,6 @@ public class ZoneView
     public void DeactivateView() => IsActive = false;
 
     public void ActivateView() => IsActive = true;
+
+    public object? DataContext { get; set; }
 }

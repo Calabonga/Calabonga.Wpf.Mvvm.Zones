@@ -14,4 +14,12 @@ public interface IZoneManager
     void ActivateZone<TView, TViewModel>(string zoneName)
         where TView : IZoneView
         where TViewModel : IZoneViewModel;
+
+    public event EventHandler<ZoneView>? Activating;
+
+    public event EventHandler<ZoneView>? Activated;
+
+    public event EventHandler<ZoneView>? Deactivating;
+
+    public event EventHandler<ZoneView>? Deactivated;
 }
