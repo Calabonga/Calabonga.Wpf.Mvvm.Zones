@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Calabonga.Wpf.Mvvm.Zones;
 
@@ -10,12 +9,7 @@ public class ZoneManager : IZoneManager
 {
     private readonly IServiceProvider _serviceProvider;
 
-    private readonly Dictionary<Type, object> _views = new();
-
-    public ZoneManager(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+    public ZoneManager(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
 
     public void ActivateZone<TZoneView, TZoneViewModel>(string zoneName)
         where TZoneView : IZoneView
@@ -27,27 +21,23 @@ public class ZoneManager : IZoneManager
             throw new ArgumentNullException(nameof(zone));
         }
 
-        //if (_views.ContainsKey(typeof(TZoneView)))
-        //{
-        //    var viewFromCache = _views[typeof(TZoneView)];
-        //    zone.SetContent((FrameworkElement)viewFromCache);
-        //    return;
-        //}
+        var activeZone = zone.GetActive();
+
+        if (activeZone is not null && zoneName == zone.Name)
+        {
+            if (typeof(TZoneView) == activeZone.Type)
+            {
+                return;
+            }
+
+            activeZone.DeactivateView();
+
+        }
 
         using var scope = _serviceProvider.CreateScope();
         var view = scope.ServiceProvider.GetRequiredService<TZoneView>();
         var viewModel = scope.ServiceProvider.GetRequiredService<TZoneViewModel>();
         view.DataContext = viewModel;
-
-        if (view is not FrameworkElement useControl)
-        {
-            throw new InvalidOperationException($"Unable activate map point {zoneName}");
-        }
-
-        // _views.Add(typeof(TZoneView), view);
-
-        zone.SetContent(useControl);
+        zone.CreateOrActivate(view);
     }
-
-
 }

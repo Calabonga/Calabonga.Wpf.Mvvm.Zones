@@ -1,10 +1,13 @@
-﻿using System.Windows;
+﻿namespace Calabonga.Wpf.Mvvm.Zones;
 
-namespace Calabonga.Wpf.Mvvm.Zones;
-
+/// <summary>
+/// Zone for content
+/// </summary>
 public interface IZone
 {
     string Name { get; }
 
-    void SetContent(FrameworkElement element);
+    void CreateOrActivate<TZoneView>(TZoneView view) where TZoneView : IZoneView;
+
+    ZoneView? GetActive();
 }

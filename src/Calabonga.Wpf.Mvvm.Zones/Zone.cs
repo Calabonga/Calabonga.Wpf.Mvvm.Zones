@@ -7,6 +7,8 @@ public class Zone : IZone
 {
     private readonly DependencyObject _control;
 
+    private readonly List<ZoneView> _views = new();
+
     public Zone(string mapName, DependencyObject element)
     {
         Name = mapName;
@@ -15,8 +17,30 @@ public class Zone : IZone
 
     public string Name { get; }
 
-    public void SetContent(FrameworkElement value)
+    public void CreateOrActivate<TZoneView>(TZoneView view) where TZoneView : IZoneView
     {
-        _control.SetValue(ContentControl.ContentProperty, value);
+        var viewInZone = _views.SingleOrDefault(x => x.Type == typeof(TZoneView));
+
+        if (viewInZone is null)
+        {
+            if (view is not FrameworkElement userControl)
+            {
+                throw new InvalidOperationException($"Unable to activate zone {Name} with {view.GetType()}");
+            }
+
+            viewInZone = new ZoneView(typeof(TZoneView), userControl);
+            _views.Add(viewInZone);
+
+        }
+
+        SetContent(viewInZone);
+    }
+
+    public ZoneView? GetActive() => _views.SingleOrDefault(x => x.IsActive);
+
+    private void SetContent(ZoneView view)
+    {
+        view.ActivateView();
+        _control.SetValue(ContentControl.ContentProperty, view.View);
     }
 }
