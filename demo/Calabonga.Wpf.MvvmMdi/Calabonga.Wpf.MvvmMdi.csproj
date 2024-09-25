@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Calabonga.Wpf.Mvvm.Zones\Calabonga.Wpf.Mvvm.Zones.csproj" />
+    <ProjectReference Include="..\..\src\Calabonga.Wpf.Mvvm.Zones\Calabonga.Wpf.Mvvm.Zones.csproj" />
   </ItemGroup>
 
   <ItemGroup>
