@@ -21,7 +21,16 @@ public sealed class ZoneHolder
     /// </summary>
     /// <param name="zoneName"></param>
     /// <returns></returns>
-    public IZone? GetZone(string zoneName) => _zones.FirstOrDefault(x => x.Name == zoneName);
+    public IZone GetZone(string zoneName)
+    {
+        var zone = _zones.FirstOrDefault(x => x.Name == zoneName);
+        if (zone is null)
+        {
+            throw new ArgumentNullException(nameof(zone));
+        }
+
+        return zone;
+    }
 
     /// <summary>
     /// Find zones where ViewModel is placed
@@ -30,9 +39,8 @@ public sealed class ZoneHolder
     /// <param name="onDeactivating"></param>
     /// <param name="onDeactivated"></param>
     /// <returns></returns>
-    public void GetViewModelZones(IZoneViewModel viewModel, Action<ZoneItem> onDeactivating, Action<ZoneItem> onDeactivated)
+    public void RemoveFromZones(IZoneViewModel viewModel, Action<ZoneItem> onDeactivating, Action<ZoneItem> onDeactivated)
     {
-
         foreach (var zone in _zones)
         {
             var itemsToRemove = new List<ZoneItem>();

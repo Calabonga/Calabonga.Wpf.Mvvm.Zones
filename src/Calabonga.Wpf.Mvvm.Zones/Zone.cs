@@ -32,7 +32,6 @@ public class Zone : IZone
 
             viewInZone = new ZoneItem(typeof(TZoneView), userControl);
             _views.Add(viewInZone);
-
         }
 
         SetContent(viewInZone, onActivating);

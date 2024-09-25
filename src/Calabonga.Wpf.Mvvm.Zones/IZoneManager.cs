@@ -15,15 +15,28 @@ public interface IZoneManager
         where TView : IZoneView
         where TViewModel : IZoneViewModel;
 
-    // Calabonga: Remove before pull request (IZoneManager 2024-09-24 11:07)
-
+    /// <summary>
+    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// </summary>
     public event EventHandler<ZoneItem>? Activating;
 
+    /// <summary>
+    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// </summary>
     public event EventHandler<ZoneItem>? Activated;
 
+    /// <summary>
+    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// </summary>
     public event EventHandler<ZoneItem>? Deactivating;
 
+    /// <summary>
+    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// </summary>
     public event EventHandler<ZoneItem>? Deactivated;
 
+    /// <summary>
+    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// </summary>
     void Remove(IZoneViewModel viewModel);
 }

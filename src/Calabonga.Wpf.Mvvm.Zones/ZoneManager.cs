@@ -5,7 +5,7 @@ namespace Calabonga.Wpf.Mvvm.Zones;
 /// <summary>
 /// Zone Manager
 /// </summary>
-public class ZoneManager : IZoneManager
+public sealed class ZoneManager : IZoneManager
 {
     private readonly IServiceProvider _serviceProvider;
 
@@ -22,9 +22,7 @@ public class ZoneManager : IZoneManager
     public event EventHandler<ZoneItem>? Deactivated;
 
     public void Remove(IZoneViewModel viewModel)
-    {
-        ZoneHolder.Instance.GetViewModelZones(viewModel, OnDeactivating, OnDeactivated);
-    }
+        => ZoneHolder.Instance.RemoveFromZones(viewModel, OnDeactivating, OnDeactivated);
 
     #endregion
 
@@ -39,11 +37,6 @@ public class ZoneManager : IZoneManager
         where TViewModel : IZoneViewModel
     {
         var zone = ZoneHolder.Instance.GetZone(zoneName);
-        if (zone is null)
-        {
-            throw new ArgumentNullException(nameof(zone));
-        }
-
         var activeZone = zone.GetActive();
 
         if (activeZone is not null && zoneName == zone.Name)
@@ -67,11 +60,14 @@ public class ZoneManager : IZoneManager
         }
 
         view.DataContext = viewModel;
+
+        ZoneHolder.Instance.RemoveFromZones(viewModel, OnDeactivating, OnDeactivated);
+
         var zoneView = zone.CreateOrActivate(view, OnActivating);
         OnActivated(zoneView);
     }
 
-    protected virtual void OnActivating(ZoneItem e)
+    private void OnActivating(ZoneItem e)
     {
         if (((IZoneView)e.Content).DataContext is IZoneViewModel viewModel)
         {
@@ -80,9 +76,9 @@ public class ZoneManager : IZoneManager
         Activating?.Invoke(this, e);
     }
 
-    protected virtual void OnActivated(ZoneItem e) => Activated?.Invoke(this, e);
+    private void OnActivated(ZoneItem e) => Activated?.Invoke(this, e);
 
-    protected virtual void OnDeactivating(ZoneItem e)
+    private void OnDeactivating(ZoneItem e)
     {
         if (((IZoneView)e.Content).DataContext is IZoneViewModel viewModel)
         {
@@ -91,5 +87,5 @@ public class ZoneManager : IZoneManager
         Deactivating?.Invoke(this, e);
     }
 
-    protected virtual void OnDeactivated(ZoneItem e) => Deactivated?.Invoke(this, e);
+    private void OnDeactivated(ZoneItem e) => Deactivated?.Invoke(this, e);
 }
