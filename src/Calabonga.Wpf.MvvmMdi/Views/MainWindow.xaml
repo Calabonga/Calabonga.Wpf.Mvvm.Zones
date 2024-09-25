@@ -1,0 +1,41 @@
+﻿<Window x:Class="Calabonga.Wpf.MvvmMdi.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calabonga.Wpf.MvvmMdi"
+        xmlns:zones="clr-namespace:Calabonga.Wpf.Mvvm.Zones;assembly=Calabonga.Wpf.Mvvm.Zones"
+        xmlns:core="clr-namespace:Calabonga.Wpf.MvvmMdi.Core"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="{Binding Title}" Height="600" Width="800" Icon="/logo.png">
+    <Window.Resources>
+        <core:ZoneNameConverter x:Key="ZoneNameConverter"/>
+    </Window.Resources>
+
+    <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+        <StackPanel DockPanel.Dock="Top"  Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                <RadioButton GroupName="Zone" IsChecked="{Binding ZoneName, Converter={StaticResource ZoneNameConverter}, ConverterParameter='Main'}" Content="Main" />
+                <RadioButton GroupName="Zone" IsChecked="{Binding ZoneName,  Converter={StaticResource ZoneNameConverter}, ConverterParameter='Details'}" Content="Details"/>
+            </StackPanel>
+            <Button Width="150" ContentStringFormat="Open Main in {0}"
+                    Content="{Binding ZoneName}"
+                    Command="{Binding OpenMainCommand}" Margin="0,0,10,0" />
+            <Button Width="150" ContentStringFormat="Open Details in {0}"
+                    Content="{Binding ZoneName}" Command="{Binding OpenDetailsCommand}"
+                    Margin="0,0,10,0" />
+            <Button Width="150" 
+                    Content="Add TabItem" Command="{Binding AddCommand}"
+                    Margin="0,0,10,0" />
+        </StackPanel>
+
+        <ContentControl DockPanel.Dock="Left" zones:Zones.ZoneName="{x:Static local:AppData.MainZoneName}"   />
+
+        <ContentControl DockPanel.Dock="Right" zones:Zones.ZoneName="{x:Static local:AppData.DetailsZoneName}" />
+
+        <TabControl ItemsSource="{Binding Tabs}"/>
+
+    </DockPanel>
+</Window>

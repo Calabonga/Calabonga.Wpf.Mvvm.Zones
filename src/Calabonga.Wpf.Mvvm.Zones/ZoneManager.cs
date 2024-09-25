@@ -1,15 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Calabonga.Wpf.Mvvm.Zones;
+﻿namespace Calabonga.Wpf.Mvvm.Zones;
 
 /// <summary>
 /// Zone Manager
 /// </summary>
 public sealed class ZoneManager : IZoneManager
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IMvvmObjectFactory _mvvmFactory;
 
-    public ZoneManager(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
+    public ZoneManager(IMvvmObjectFactory mvvmFactory) => _mvvmFactory = mvvmFactory;
 
     #region Events
 
@@ -51,17 +49,24 @@ public sealed class ZoneManager : IZoneManager
             OnDeactivated(activeZone);
         }
 
-        using var scope = _serviceProvider.CreateScope();
-        var view = scope.ServiceProvider.GetRequiredService<TView>();
-        var viewModel = scope.ServiceProvider.GetRequiredService<TViewModel>();
-        if (viewModel is ZoneViewModelBase zoneViewModel)
+        //using var scope = _serviceProvider.CreateScope();
+        //var view = scope.ServiceProvider.GetRequiredService<TView>();
+        //var viewModel = scope.ServiceProvider.GetRequiredService<TViewModel>();
+        //if (viewModel is ZoneViewModelBase zoneViewModel)
+        //{
+        //    zoneViewModel.ZoneManager = this;
+        //}
+
+        //view.DataContext = viewModel;
+
+        var view = _mvvmFactory.Create<TView, TViewModel>(onViewModelCreated: viewModel =>
         {
-            zoneViewModel.ZoneManager = this;
-        }
-
-        view.DataContext = viewModel;
-
-        ZoneHolder.Instance.RemoveFromZones(viewModel, OnDeactivating, OnDeactivated);
+            ZoneHolder.Instance.RemoveFromZones(viewModel, OnDeactivating, OnDeactivated);
+            if (viewModel is ZoneViewModelBase zoneViewModel)
+            {
+                zoneViewModel.ZoneManager = this;
+            }
+        });
 
         var zoneView = zone.CreateOrActivate(view, OnActivating);
         OnActivated(zoneView);
