@@ -90,7 +90,7 @@ There are a few simple steps:
         _zoneManager = zoneManager;
     }
    ```
-8. Now you can open your components in the zones you want:
+8. Now you can open your components in the zones you want. For example, in the registered zones `MainZone` and `DetailsZone`:
    ```csharp
     [RelayCommand]
     private void OpenMain()
@@ -107,3 +107,15 @@ There are a few simple steps:
 ## Demo
 
 You can find in this repository a `demo` project from where this snippets used.
+
+### CommunityToolkit Messaging
+
+DoubleClick on text in the Detail zone will send a message to the module in Main zone and to the Shell (see in window title).
+
+<img width="640" alt="double-click" src="https://github.com/user-attachments/assets/0d4e68d4-3b0b-42f9-91ea-76406eface6c">
+
+### Remove module
+
+DoubleClick on tne text in the Main zone will remove it self from zone where it opened.
+<img width="640" alt="double-click-close" src="https://github.com/user-attachments/assets/d388d98b-1282-406b-8f81-7aeada36f7c8">
+
