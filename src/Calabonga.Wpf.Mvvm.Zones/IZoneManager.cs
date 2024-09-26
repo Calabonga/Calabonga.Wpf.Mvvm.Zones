@@ -16,27 +16,28 @@ public interface IZoneManager
         where TViewModel : IZoneViewModel;
 
     /// <summary>
-    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// Handler for Activating event
     /// </summary>
     public event EventHandler<ZoneItem>? Activating;
 
     /// <summary>
-    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// Handler for Activated event
     /// </summary>
     public event EventHandler<ZoneItem>? Activated;
 
     /// <summary>
-    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// Handler for Deactivating event
     /// </summary>
     public event EventHandler<ZoneItem>? Deactivating;
 
     /// <summary>
-    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// Handler for Deactivated event
     /// </summary>
     public event EventHandler<ZoneItem>? Deactivated;
 
     /// <summary>
-    /// // Calabonga: Summary required (IZoneManager 2024-09-25 08:43)
+    /// Removes <see cref="ZoneItem"/> from zone
     /// </summary>
+    /// <param name="viewModel"></param>
     void Remove(IZoneViewModel viewModel);
 }

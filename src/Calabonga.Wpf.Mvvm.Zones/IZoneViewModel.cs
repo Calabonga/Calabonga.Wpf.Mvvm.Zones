@@ -1,30 +1,22 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace Calabonga.Wpf.Mvvm.Zones;
+﻿namespace Calabonga.Wpf.Mvvm.Zones;
 
 /// <summary>
-/// // Calabonga: Summary required (IZoneViewModel 2024-09-24 12:07)
+/// ZoneViewModel interface
 /// </summary>
 public interface IZoneViewModel
 {
+    /// <summary>
+    /// Returns reference to <see cref="IZoneManager"/> manager for current zone item ViewModel.
+    /// </summary>
     IZoneManager ZoneManager { get; }
 
     /// <summary>
-    /// // Calabonga: Summary required (IZoneViewModel 2024-09-24 12:07)
+    /// Deactivates current viewModel
     /// </summary>
     void OnDeactivate();
 
     /// <summary>
-    /// // Calabonga: Summary required (IZoneViewModel 2024-09-24 12:08)
+    /// Activates current viewModel
     /// </summary>
     void OnActivate();
-}
-
-public abstract class ZoneViewModelBase : ObservableObject, IZoneViewModel
-{
-    public IZoneManager ZoneManager { get; set; } = null!;
-
-    public virtual void OnDeactivate() { }
-
-    public virtual void OnActivate() { }
 }

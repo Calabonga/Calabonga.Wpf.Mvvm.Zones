@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Calabonga.Wpf.Mvvm.Zones;
+﻿using Calabonga.Wpf.Mvvm.Zones;
 using Calabonga.Wpf.MvvmMdi.Core;
 using Calabonga.Wpf.MvvmMdi.Messaging;
 using Calabonga.Wpf.MvvmMdi.Screens;
@@ -14,49 +13,35 @@ namespace Calabonga.Wpf.MvvmMdi.ViewModels;
 /// </summary>
 public partial class MainWindowViewModel : ViewModelBase, IRecipient<MessageFromDetails>
 {
-    private readonly IMvvmObjectFactory _mvvmFactory;
     private readonly IZoneManager _zoneManager;
 
     public MainWindowViewModel(
-        IMvvmObjectFactory mvvmFactory,
         IZoneManager zoneManager,
         IVersionService versionService)
     {
         Title = $"WPF with MVVM (v{versionService.Version})";
-        _mvvmFactory = mvvmFactory;
         _zoneManager = zoneManager;
 
         _zoneManager.Activated += (_, view) =>
         {
-            if (view.Type == typeof(IMainZoneView))
+            if (view.Content is IMainZoneView)
             {
-                WeakReferenceMessenger.Default.RegisterAll(this);
+                WeakReferenceMessenger.Default.Register(this);
             }
         };
         _zoneManager.Deactivated += (_, view) =>
         {
-            if (view.Type == typeof(IMainZoneView))
+            if (view.Content is IMainZoneView)
             {
-                WeakReferenceMessenger.Default.UnregisterAll(this);
+                WeakReferenceMessenger.Default.Unregister<MessageFromDetails>(this);
             }
         };
     }
-
-    [ObservableProperty]
-    private ObservableCollection<IZoneView> _tabs = new();
 
     [ObservableProperty]
     private string _zoneName = "Main";
 
     #region Commands
-
-    [RelayCommand]
-    private void Add()
-    {
-        var view = _mvvmFactory.Create(typeof(IMainZoneView), typeof(IMainZoneViewModel));
-
-        Tabs.Add(view);
-    }
 
     [RelayCommand]
     private void OpenMain()

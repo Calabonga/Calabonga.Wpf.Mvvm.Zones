@@ -60,10 +60,7 @@ public static class Zones
         ZoneHolder.Instance.RegisterZone(element, name!);
     }
 
-    private static bool IsInDesignMode(DependencyObject element)
-    {
-        return DesignerProperties.GetIsInDesignMode(element);
-    }
+    private static bool IsInDesignMode(DependencyObject element) => DesignerProperties.GetIsInDesignMode(element);
 
     #endregion
 }

@@ -11,14 +11,30 @@ public sealed class ZoneManager : IZoneManager
 
     #region Events
 
+    /// <summary>
+    /// Handler for Activating event
+    /// </summary>
     public event EventHandler<ZoneItem>? Activating;
 
+    /// <summary>
+    /// Handler for Activated event
+    /// </summary>
     public event EventHandler<ZoneItem>? Activated;
 
+    /// <summary>
+    /// Handler for Deactivating event
+    /// </summary>
     public event EventHandler<ZoneItem>? Deactivating;
 
+    /// <summary>
+    /// Handler for Deactivated event
+    /// </summary>
     public event EventHandler<ZoneItem>? Deactivated;
 
+    /// <summary>
+    /// Removes <see cref="ZoneItem"/> from zone
+    /// </summary>
+    /// <param name="viewModel"></param>
     public void Remove(IZoneViewModel viewModel)
         => ZoneHolder.Instance.RemoveFromZones(viewModel, OnDeactivating, OnDeactivated);
 
@@ -48,16 +64,6 @@ public sealed class ZoneManager : IZoneManager
             activeZone.DeactivateView();
             OnDeactivated(activeZone);
         }
-
-        //using var scope = _serviceProvider.CreateScope();
-        //var view = scope.ServiceProvider.GetRequiredService<TView>();
-        //var viewModel = scope.ServiceProvider.GetRequiredService<TViewModel>();
-        //if (viewModel is ZoneViewModelBase zoneViewModel)
-        //{
-        //    zoneViewModel.ZoneManager = this;
-        //}
-
-        //view.DataContext = viewModel;
 
         var view = _mvvmFactory.Create<TView, TViewModel>(onViewModelCreated: viewModel =>
         {

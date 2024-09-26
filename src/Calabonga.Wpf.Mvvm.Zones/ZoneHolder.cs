@@ -3,7 +3,7 @@
 namespace Calabonga.Wpf.Mvvm.Zones;
 
 /// <summary>
-/// Zone Storage as singleton
+/// Zone Storage as singleton. Current holder required as storage for XAML element marked as <see cref="IZone"/> for other components placement
 /// </summary>
 public sealed class ZoneHolder
 {
@@ -72,6 +72,7 @@ public sealed class ZoneHolder
     #region singleton
 
     private static readonly Lazy<ZoneHolder> Lazy = new(() => new ZoneHolder());
+
 
     private ZoneHolder() { }
 

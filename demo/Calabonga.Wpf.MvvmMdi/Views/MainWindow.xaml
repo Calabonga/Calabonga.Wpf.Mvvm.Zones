@@ -14,28 +14,24 @@
     </Window.Resources>
 
     <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-
         <StackPanel DockPanel.Dock="Top"  Orientation="Horizontal" HorizontalAlignment="Center">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-                <RadioButton GroupName="Zone" IsChecked="{Binding ZoneName, Converter={StaticResource ZoneNameConverter}, ConverterParameter='Main'}" Content="Main" />
-                <RadioButton GroupName="Zone" IsChecked="{Binding ZoneName,  Converter={StaticResource ZoneNameConverter}, ConverterParameter='Details'}" Content="Details"/>
+            <StackPanel Margin="0,0,10,0">
+                <TextBlock Text="Select a zone to activate view:"/>
+                <StackPanel  VerticalAlignment="Center" Margin="0,0,10,0">
+                    <RadioButton GroupName="Zone" IsChecked="{Binding ZoneName, Converter={StaticResource ZoneNameConverter}, ConverterParameter='Main'}" Content="Zone 'Main'" />
+                    <RadioButton GroupName="Zone" IsChecked="{Binding ZoneName,  Converter={StaticResource ZoneNameConverter}, ConverterParameter='Details'}" Content="Zone 'Details'"/>
+                </StackPanel>
             </StackPanel>
-            <Button Width="150" ContentStringFormat="Open Main in {0}"
+            <Button MinWidth="150" ContentStringFormat="Open Main view in zone '{0}'"
                     Content="{Binding ZoneName}"
                     Command="{Binding OpenMainCommand}" Margin="0,0,10,0" />
-            <Button Width="150" ContentStringFormat="Open Details in {0}"
+            <Button MinWidth="150" ContentStringFormat="Open Details view in zone '{0}'"
                     Content="{Binding ZoneName}" Command="{Binding OpenDetailsCommand}"
-                    Margin="0,0,10,0" />
-            <Button Width="150" 
-                    Content="Add TabItem" Command="{Binding AddCommand}"
                     Margin="0,0,10,0" />
         </StackPanel>
 
-        <ContentControl DockPanel.Dock="Left" zones:Zones.ZoneName="{x:Static local:AppData.MainZoneName}"   />
+        <ContentControl DockPanel.Dock="Left" Width="400" zones:Zones.ZoneName="{x:Static local:AppData.MainZoneName}"   />
 
-        <ContentControl DockPanel.Dock="Right" zones:Zones.ZoneName="{x:Static local:AppData.DetailsZoneName}" />
-
-        <TabControl ItemsSource="{Binding Tabs}"/>
-
+        <ContentControl Width="400" zones:Zones.ZoneName="{x:Static local:AppData.DetailsZoneName}" />
     </DockPanel>
 </Window>

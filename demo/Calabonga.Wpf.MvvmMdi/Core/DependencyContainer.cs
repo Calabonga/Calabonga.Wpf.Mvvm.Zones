@@ -34,7 +34,7 @@ namespace Calabonga.Wpf.MvvmMdi.Core
             services.AddScoped<IDetailsZoneView, DetailZoneView>();
             services.AddScoped<IDetailsZoneViewModel, DetailsZoneViewModel>();
 
-            services.AddSingleton<IZoneManager, ZoneManager>();
+            services.AddZones();
 
             return services.BuildServiceProvider();
         }
