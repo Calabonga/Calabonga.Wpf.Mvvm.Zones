@@ -34,15 +34,15 @@ There are a few simple steps:
     </DockPanel>
    ```
 
-4. Now we are ready to create some C# objects. First of all we need views for Zone inherited from `IZoneView`:
-    ```c#
+4. Now we are ready to create some csharp objects. First of all we need views for Zone inherited from `IZoneView`:
+    ```csharp
     public interface IMainZoneView : IZoneView { }
 
     public interface IDetailsZoneView : IZoneView { }
     ```
     We should also create a views using this interfaces. For example for `IMainZoneView`:
 
-    ```c#
+    ```csharp
         /// <summary>
         /// Interaction logic for MainZoneView.xaml
         /// </summary>
@@ -57,41 +57,41 @@ There are a few simple steps:
 
     Then we need to viewModels for Zone inherited from `IZoneViewModel`:
 
-    ```c#    
+    ```csharp    
     public interface IMainZoneViewModel : IZoneViewModel { }
 
     public interface IDetailsZoneViewModel : IZoneViewModel { }
     ```
 
     We should also create a viewModels using interfaces. Example:
-    ```c#
+    ```csharp
         public partial class MainZoneViewModel : ZoneViewModelBase, IMainZoneViewModel
         {
                 //skipped markup for brevity        
         }
     ```
-
-5. Register your items in Dependency Injection Container:
-   ```c#
-        services.AddScoped<IMainZoneView, MainZoneView>();
-        services.AddScoped<IMainZoneViewModel, MainZoneViewModel>();
-
-        services.AddScoped<IDetailsZoneView, DetailZoneView>();
-        services.AddScoped<IDetailsZoneViewModel, DetailsZoneViewModel>();
+5. Register ZoneManager in your Dependency Injection Container:
+    ``` diff
+    + services.AddZones();
+    ```
+6. Register your modules Views ans ViewModels interfaces in Dependency Injection Container:
+   
+   ```diff
+   + services.AddScoped<IMainZoneView, MainZoneView>();
+   + services.AddScoped<IMainZoneViewModel, MainZoneViewModel>();
+   + services.AddScoped<IDetailsZoneView, DetailZoneView>();
+   + services.AddScoped<IDetailsZoneViewModel, DetailsZoneViewModel>();
    ```
-6. Inject `ZoneManager` into your main ViewModel:
-   ```c#
-        
-    public MainWindowViewModel(
-        IZoneManager zoneManager,
-        IVersionService versionService)
+7. Inject `ZoneManager` into your main ViewModel:
+   ```csharp
+    public MainWindowViewModel(IZoneManager zoneManager, IVersionService versionService)
     {
         Title = $"WPF with MVVM (v{versionService.Version})";
         _zoneManager = zoneManager;
     }
    ```
-7. Switch your components to 
-   ```c#
+8. Now you can open your components in the zones you want:
+   ```csharp
     [RelayCommand]
     private void OpenMain()
     {
@@ -106,4 +106,4 @@ There are a few simple steps:
    ```
 ## Demo
 
-You can find in repository a demo project.
+You can find in this repository a `demo` project from where this snippets used.
