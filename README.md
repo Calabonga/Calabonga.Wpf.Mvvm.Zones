@@ -119,3 +119,12 @@ DoubleClick on text in the Detail zone will send a message to the module in Main
 DoubleClick on tne text in the Main zone will remove it self from zone where it opened.
 <img width="640" alt="double-click-close" src="https://github.com/user-attachments/assets/d388d98b-1282-406b-8f81-7aeada36f7c8">
 
+## History 
+
+### 1.0.1 2024-10-21
+
+IMvvmObjectFactory added to dependency injection registration fixed.
+
+### 1.0.0 2024-09-26
+
+First release
