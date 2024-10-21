@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>$(AssemblyName)</Title>
@@ -24,7 +24,7 @@
 		<IncludeSource>true</IncludeSource>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<Deterministic>true</Deterministic>
-		<PackageReleaseNotes>First Release</PackageReleaseNotes>
+		<PackageReleaseNotes>IMvvmObjectFactory added to dependency injection registration.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

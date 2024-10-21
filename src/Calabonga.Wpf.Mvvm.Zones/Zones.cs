@@ -39,7 +39,7 @@ public static class Zones
         areaTarget.SetValue(ZoneNameProperty, placeName);
     }
 
-    public static string? GetZoneName(DependencyObject areaTarget)
+    private static string? GetZoneName(DependencyObject areaTarget)
     {
         if (areaTarget == null)
         {
