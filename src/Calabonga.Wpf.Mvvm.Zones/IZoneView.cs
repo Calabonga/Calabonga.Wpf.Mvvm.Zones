@@ -13,4 +13,3 @@ public interface IZoneView
     /// </summary>
     object? DataContext { get; set; }
 }
-
